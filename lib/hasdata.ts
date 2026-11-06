@@ -12,17 +12,42 @@ export type SearchInput = {
   childrenAges: number[]; // one age (0-17) per child
 };
 
-async function callHasData(url: string, params: URLSearchParams): Promise<unknown> {
-  const apiKey = process.env.HASDATA_API_KEY;
-  if (!apiKey) throw new Error("HASDATA_API_KEY is not set");
+// The HasData free plan allows 1 request at a time (more returns HTTP 429).
+// So HasData requests take turns: the subagents still start together, but their
+// HasData calls run one after the other. A 429 (e.g. from another search) is retried.
+const MAX_429_RETRIES = 2;
+export const RETRY_DELAY_MS = { value: 2000 };
 
-  const res = await fetch(`${url}?${params.toString()}`, {
-    method: "GET",
-    headers: { "x-api-key": apiKey, "Content-Type": "application/json" },
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`HasData request failed: HTTP ${res.status}`);
-  return res.json();
+let queue: Promise<unknown> = Promise.resolve();
+
+function oneAtATime<T>(task: () => Promise<T>): Promise<T> {
+  const run = queue.then(task, task);
+  queue = run.catch(() => undefined);
+  return run;
+}
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function fetchWithRetry(url: string, apiKey: string): Promise<unknown> {
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(url, {
+      method: "GET",
+      headers: { "x-api-key": apiKey, "Content-Type": "application/json" },
+      cache: "no-store",
+    });
+    if (res.status === 429 && attempt < MAX_429_RETRIES) {
+      await sleep(RETRY_DELAY_MS.value);
+      continue;
+    }
+    if (!res.ok) throw new Error(`HasData request failed: HTTP ${res.status}`);
+    return res.json();
+  }
+}
+
+function callHasData(url: string, params: URLSearchParams): Promise<unknown> {
+  const apiKey = process.env.HASDATA_API_KEY;
+  if (!apiKey) return Promise.reject(new Error("HASDATA_API_KEY is not set"));
+  return oneAtATime(() => fetchWithRetry(`${url}?${params.toString()}`, apiKey));
 }
 
 export function searchBooking(input: SearchInput): Promise<unknown> {
