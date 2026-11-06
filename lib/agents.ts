@@ -4,7 +4,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { getClient, getModel } from "./anthropic";
 import type { SearchInput } from "./hasdata";
-import { searchSite, type SiteResult } from "./sites";
+import { searchSite, type FakeMode, type SiteResult } from "./sites";
 import { combineResults, type SiteName, type Stay } from "./stays";
 
 export type Timing = { agent: string; startedMs: number; finishedMs: number };
@@ -37,7 +37,7 @@ function toolNamesCalled(message: Anthropic.Message): string[] {
 }
 
 // One subagent: its own Claude call with exactly one tool (its site's search).
-async function runSubagent(cfg: SiteConfig, input: SearchInput, useMock: boolean, t0: number, timings: Timing[]): Promise<SiteResult> {
+async function runSubagent(cfg: SiteConfig, input: SearchInput, useMock: boolean, t0: number, timings: Timing[], fake?: FakeMode): Promise<SiteResult> {
   const startedMs = Date.now() - t0;
   let result: SiteResult;
   try {
@@ -66,7 +66,7 @@ async function runSubagent(cfg: SiteConfig, input: SearchInput, useMock: boolean
     }
     if (!called) console.warn(`${cfg.site}: subagent did not call its tool, running the tool directly`);
     // The tool always uses the user's search inputs, never the AI's text.
-    result = await searchSite(cfg.site, input, useMock);
+    result = await searchSite(cfg.site, input, useMock, fake);
   } catch (err) {
     console.error(`${cfg.site}: ${err instanceof Error ? err.message : String(err)}`);
     result = { site: cfg.site, status: "failed", stays: [] };
@@ -77,7 +77,9 @@ async function runSubagent(cfg: SiteConfig, input: SearchInput, useMock: boolean
 
 // Main agent: its own Claude call with exactly 2 tools (one per subagent).
 // Both subagents run at the same time; results are combined and ranked in code.
-export async function runSearch(input: SearchInput, useMock: boolean): Promise<SearchResult> {
+export type FakeSites = { booking?: FakeMode; airbnb?: FakeMode };
+
+export async function runSearch(input: SearchInput, useMock: boolean, fake: FakeSites = {}): Promise<SearchResult> {
   const t0 = Date.now();
   const timings: Timing[] = [];
   const mainStarted = 0;
@@ -110,7 +112,9 @@ export async function runSearch(input: SearchInput, useMock: boolean): Promise<S
   }
   const mainDecidedMs = Date.now() - t0;
 
-  const [booking, airbnb] = await Promise.all(SITES.map((s) => runSubagent(s, input, useMock, t0, timings)));
+  const [booking, airbnb] = await Promise.all(
+    SITES.map((s) => runSubagent(s, input, useMock, t0, timings, s.site === "Booking.com" ? fake.booking : fake.airbnb)),
+  );
   const stays = combineResults([booking.stays, airbnb.stays]);
 
   timings.unshift({ agent: "Main agent (Claude call)", startedMs: mainStarted, finishedMs: mainDecidedMs });

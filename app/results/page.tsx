@@ -1,13 +1,22 @@
 import { Suspense } from "react";
-import ReceivedInputs from "./ReceivedInputs";
+import ResultsView from "./ResultsView";
+import styles from "./results.module.css";
 
-// Placeholder for now: shows the inputs received from the Search page.
+// The inputs are read from the URL in the browser (inside Suspense), then /api/search is called.
 export default function ResultsPage() {
   return (
-    <main style={{ padding: "72px 16px", maxWidth: 880, margin: "0 auto" }}>
-      <h1 style={{ fontSize: 32, fontWeight: 600, marginBottom: 24 }}>Results (placeholder)</h1>
-      <Suspense fallback={<p>Loading…</p>}>
-        <ReceivedInputs />
+    <main className={styles.page}>
+      <Suspense
+        fallback={
+          <div className={styles.content}>
+            <div className={styles.loading} role="status">
+              <span className={styles.spinner} aria-hidden="true" />
+              Searching Booking.com and Airbnb…
+            </div>
+          </div>
+        }
+      >
+        <ResultsView />
       </Suspense>
     </main>
   );

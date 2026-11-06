@@ -20,8 +20,13 @@ async function getRaw(site: SiteName, input: SearchInput, useMock: boolean): Pro
   return site === "Booking.com" ? searchBooking(input) : searchAirbnb(input);
 }
 
-export async function searchSite(site: SiteName, input: SearchInput, useMock: boolean): Promise<SiteResult> {
+// Local-only test switch: fake a failed or empty site. Ignored in production (see /api/search).
+export type FakeMode = "failed" | "empty";
+
+export async function searchSite(site: SiteName, input: SearchInput, useMock: boolean, fake?: FakeMode): Promise<SiteResult> {
   try {
+    if (fake === "failed") throw new Error(`${site}: faked failure (local test switch)`);
+    if (fake === "empty") return { site, status: "ok", stays: [] };
     const raw = await getRaw(site, input, useMock);
     const mapped =
       site === "Booking.com"

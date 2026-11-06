@@ -119,15 +119,30 @@ export default function SearchForm() {
   const [childAges, setChildAges] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
 
-  // Dates are filled in the browser on load (not during prerender).
+  // Filled in the browser on load (not during prerender): defaults, or the inputs kept
+  // in the URL when coming back from the Results page ("New search").
   useEffect(() => {
     const now = new Date();
     const tomorrow = new Date(now);
     tomorrow.setDate(now.getDate() + 1);
+    const kept = new URLSearchParams(window.location.search);
+    const isDate = (v: string | null): v is string => !!v && /^\d{4}-\d{2}-\d{2}$/.test(v);
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setToday(toIsoDate(now));
-    setCheckIn(toIsoDate(now));
-    setCheckOut(toIsoDate(tomorrow));
+    const keptIn = kept.get("checkIn");
+    const keptOut = kept.get("checkOut");
+    setCheckIn(isDate(keptIn) ? keptIn : toIsoDate(now));
+    setCheckOut(isDate(keptOut) ? keptOut : toIsoDate(tomorrow));
+    const keptDestination = kept.get("destination");
+    if (keptDestination) setDestination(keptDestination);
+    const keptAdults = kept.get("adults");
+    if (keptAdults && /^\d+$/.test(keptAdults)) setAdults(keptAdults);
+    const keptAges = (kept.get("childAges") ?? "").split(",").filter((a) => /^\d+$/.test(a) && Number(a) <= 17);
+    if (keptAges.length > 0) {
+      const ages = keptAges.slice(0, MAX_CHILDREN);
+      setChildren(String(ages.length));
+      setChildAges(ages);
+    }
   }, []);
 
   function changeChildren(value: string) {

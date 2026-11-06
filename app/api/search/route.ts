@@ -1,4 +1,4 @@
-import { runSearch } from "@/lib/agents";
+import { runSearch, type FakeSites } from "@/lib/agents";
 import type { SearchInput } from "@/lib/hasdata";
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -19,6 +19,23 @@ function parseInput(body: unknown): SearchInput | string {
   return { destination, checkIn: b.checkIn, checkOut: b.checkOut, adults: b.adults as number, childrenAges: ages as number[] };
 }
 
+// Local-only test switch ("test" in the body) to fake a failed or empty site.
+// Ignored in production, so it never works on the live site.
+const TEST_MODES: Record<string, FakeSites> = {
+  "booking-failed": { booking: "failed" },
+  "airbnb-failed": { airbnb: "failed" },
+  "both-failed": { booking: "failed", airbnb: "failed" },
+  "booking-empty": { booking: "empty" },
+  "airbnb-empty": { airbnb: "empty" },
+  "both-empty": { booking: "empty", airbnb: "empty" },
+};
+
+function fakeSites(body: unknown): FakeSites {
+  if (process.env.NODE_ENV === "production") return {};
+  const test = (body as Record<string, unknown>).test;
+  return typeof test === "string" ? TEST_MODES[test] ?? {} : {};
+}
+
 // POST /api/search: takes the search inputs, returns the stays and each site's status.
 export async function POST(request: Request) {
   let body: unknown;
@@ -30,6 +47,6 @@ export async function POST(request: Request) {
   const input = parseInput(body);
   if (typeof input === "string") return Response.json({ error: input }, { status: 400 });
 
-  const result = await runSearch(input, process.env.USE_MOCK === "true");
+  const result = await runSearch(input, process.env.USE_MOCK === "true", fakeSites(body));
   return Response.json({ stays: result.stays, sites: result.sites });
 }
