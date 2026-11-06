@@ -39,7 +39,11 @@ async function fetchWithRetry(url: string, apiKey: string): Promise<unknown> {
       await sleep(RETRY_DELAY_MS.value);
       continue;
     }
-    if (!res.ok) throw new Error(`HasData request failed: HTTP ${res.status}`);
+    if (!res.ok) {
+      // HasData's error body says which parameter was rejected (it never contains the key).
+      const reason = (await res.text().catch(() => "")).replace(/\s+/g, " ").slice(0, 300);
+      throw new Error(`HasData request failed: HTTP ${res.status}${reason ? ` (${reason})` : ""}`);
+    }
     return res.json();
   }
 }
@@ -68,12 +72,13 @@ export function searchBooking(input: SearchInput): Promise<unknown> {
 
 export function searchAirbnb(input: SearchInput): Promise<unknown> {
   // Airbnb takes the number of children only (no ages) and has no currency option.
+  // `children` is optional: only sent when there are children (children=0 looks to be rejected with HTTP 422).
   const params = new URLSearchParams({
     location: input.destination,
     checkIn: input.checkIn,
     checkOut: input.checkOut,
     adults: String(input.adults),
-    children: String(input.childrenAges.length),
   });
+  if (input.childrenAges.length > 0) params.set("children", String(input.childrenAges.length));
   return callHasData(AIRBNB_URL, params);
 }

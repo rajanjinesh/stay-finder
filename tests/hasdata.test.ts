@@ -35,13 +35,26 @@ test("HTTP 429 is retried, then succeeds", async () => {
   assert.equal(calls, 2);
 });
 
-test("other errors are not retried", async () => {
+test("other errors are not retried, and HasData's reason is kept", async () => {
   let calls = 0;
   globalThis.fetch = (async () => {
     calls++;
-    return new Response("", { status: 422 });
+    return new Response('{"error":"children must be >= 1"}', { status: 422 });
   }) as typeof fetch;
 
-  await assert.rejects(searchAirbnb(input), /HTTP 422/);
+  await assert.rejects(searchAirbnb(input), /HTTP 422 \(\{"error":"children must be >= 1"\}\)/);
   assert.equal(calls, 1);
+});
+
+test("Airbnb: children is only sent when there are children", async () => {
+  const urls: string[] = [];
+  globalThis.fetch = (async (url: string) => {
+    urls.push(url);
+    return new Response("{}", { status: 200 });
+  }) as typeof fetch;
+
+  await searchAirbnb({ ...input, childrenAges: [] });
+  await searchAirbnb(input);
+  assert.equal(new URL(urls[0]).searchParams.has("children"), false);
+  assert.equal(new URL(urls[1]).searchParams.get("children"), "1");
 });
