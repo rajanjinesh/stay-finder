@@ -1,0 +1,95 @@
+{
+  "requestMetadata": { "id": "mock-booking-1", "status": "ok" },
+  "results": [
+    {
+      "hotelId": 1001,
+      "title": "Sea View Resort",
+      "url": "https://www.booking.com/hotel/in/sea-view-resort.html",
+      "room": "Deluxe Double Room",
+      "beds": 1,
+      "bedTypes": ["1 large double bed"],
+      "location": { "address": "Calangute, Goa" },
+      "price": { "pricePerStayRaw": "₹3,600", "pricePerStayParsed": 3600, "priceBeforeDiscountParsed": 4100, "currency": "INR", "taxesAndFeesRaw": "+₹600 taxes and fees", "taxesAndFeesParsed": 600 },
+      "rating": 4,
+      "reviews": { "score": 8.2, "count": 1240, "text": "Very good" },
+      "policies": { "freeCancellation": true, "noPrepayment": false }
+    },
+    {
+      "hotelId": 1002,
+      "title": "Beach Inn",
+      "url": "https://www.booking.com/hotel/in/beach-inn.html",
+      "room": "Standard Double Room",
+      "beds": 1,
+      "bedTypes": ["1 double bed"],
+      "location": { "address": "Baga, Goa" },
+      "price": { "pricePerStayRaw": "₹4,100", "pricePerStayParsed": 4100, "priceBeforeDiscountParsed": 4100, "currency": "INR", "taxesAndFeesRaw": "+₹700 taxes and fees", "taxesAndFeesParsed": 700 },
+      "rating": 3,
+      "reviews": { "score": 7.4, "count": 530, "text": "Good" },
+      "policies": { "freeCancellation": false, "noPrepayment": true }
+    },
+    {
+      "hotelId": 1003,
+      "title": "Goa Backpackers Hostel",
+      "url": "https://www.booking.com/hotel/in/goa-backpackers.html",
+      "room": "Bed in 6-Bed Mixed Dormitory Room",
+      "beds": 1,
+      "bedTypes": ["1 single bed"],
+      "location": { "address": "Anjuna, Goa" },
+      "price": { "pricePerStayRaw": "₹900", "pricePerStayParsed": 900, "priceBeforeDiscountParsed": 900, "currency": "INR", "taxesAndFeesRaw": "+₹100 taxes and fees", "taxesAndFeesParsed": 100 },
+      "rating": 0,
+      "reviews": { "score": 8.9, "count": 310, "text": "Fabulous" },
+      "policies": { "freeCancellation": true, "noPrepayment": true }
+    },
+    {
+      "hotelId": 1004,
+      "title": "Budget Stay Panjim",
+      "url": "https://www.booking.com/hotel/in/budget-stay-panjim.html",
+      "room": "Double Room",
+      "beds": 1,
+      "bedTypes": ["1 double bed"],
+      "location": { "address": "Panaji, Goa" },
+      "price": { "pricePerStayRaw": "₹2,000", "pricePerStayParsed": 2000, "priceBeforeDiscountParsed": 2000, "currency": "INR", "taxesAndFeesRaw": "+₹300 taxes and fees", "taxesAndFeesParsed": 300 },
+      "rating": 2,
+      "reviews": { "score": 6.1, "count": 88, "text": "Pleasant" },
+      "policies": { "freeCancellation": false, "noPrepayment": false }
+    },
+    {
+      "hotelId": 1005,
+      "title": "Palm Grove Villa",
+      "url": "https://www.booking.com/hotel/in/palm-grove-villa.html",
+      "room": "Superior King Room",
+      "beds": 1,
+      "bedTypes": ["1 extra-large double bed"],
+      "location": { "address": "Candolim, Goa" },
+      "price": { "pricePerStayRaw": "₹5,200", "pricePerStayParsed": 5200, "priceBeforeDiscountParsed": 5600, "currency": "INR", "taxesAndFeesRaw": "+₹900 taxes and fees", "taxesAndFeesParsed": 900 },
+      "rating": 4,
+      "reviews": { "score": 9.0, "count": 760, "text": "Wonderful" },
+      "policies": { "freeCancellation": true, "noPrepayment": false }
+    },
+    {
+      "hotelId": 1006,
+      "title": "New Riverside Lodge",
+      "url": "https://www.booking.com/hotel/in/new-riverside-lodge.html",
+      "room": "Double Room",
+      "beds": 1,
+      "bedTypes": ["1 double bed"],
+      "location": { "address": "Mapusa, Goa" },
+      "price": { "pricePerStayRaw": "₹2,500", "pricePerStayParsed": 2500, "priceBeforeDiscountParsed": 2500, "currency": "INR", "taxesAndFeesRaw": "+₹400 taxes and fees", "taxesAndFeesParsed": 400 },
+      "rating": 3,
+      "policies": { "freeCancellation": true, "noPrepayment": true }
+    },
+    {
+      "hotelId": 1007,
+      "title": "Harbour Point Hotel",
+      "url": "https://www.booking.com/hotel/in/harbour-point.html",
+      "room": "Classic Room",
+      "beds": 1,
+      "bedTypes": ["1 double bed"],
+      "location": { "address": "Vasco da Gama, Goa" },
+      "price": { "currency": "INR" },
+      "rating": 3,
+      "reviews": { "score": 8.0, "count": 200, "text": "Very good" },
+      "policies": { "freeCancellation": false, "noPrepayment": false }
+    }
+  ]
+}

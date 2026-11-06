@@ -1,0 +1,125 @@
+{
+  "requestMetadata": { "id": "mock-airbnb-1", "status": "ok" },
+  "properties": [
+    {
+      "id": "28909212",
+      "url": "https://www.airbnb.com/rooms/28909212",
+      "title": "Cottage in Palolem",
+      "latitude": 15.01,
+      "longitude": 74.02,
+      "rating": 4.55,
+      "reviews": 210,
+      "badges": ["Guest favourite"],
+      "photos": [],
+      "price": {
+        "originalPrice": "$60",
+        "discountedPrice": "$54",
+        "qualifier": "for 3 nights",
+        "breakdown": [{ "description": "3 nights x $18.00", "price": "$54.00" }]
+      }
+    },
+    {
+      "id": "28909213",
+      "url": "https://www.airbnb.com/rooms/28909213",
+      "title": "Studio in Panaji",
+      "latitude": 15.49,
+      "longitude": 73.82,
+      "rating": 4.3,
+      "reviews": 95,
+      "badges": [],
+      "photos": [],
+      "price": {
+        "originalPrice": "$66",
+        "discountedPrice": "$66",
+        "qualifier": "for 3 nights",
+        "breakdown": [{ "description": "3 nights x $22.00", "price": "$66.00" }]
+      }
+    },
+    {
+      "id": "28909214",
+      "url": "https://www.airbnb.com/rooms/28909214",
+      "title": "Shared room in Anjuna hostel",
+      "latitude": 15.58,
+      "longitude": 73.74,
+      "rating": 4.8,
+      "reviews": 400,
+      "badges": [],
+      "photos": [],
+      "price": {
+        "originalPrice": "$24",
+        "discountedPrice": "$24",
+        "qualifier": "for 3 nights",
+        "breakdown": [{ "description": "3 nights x $8.00", "price": "$24.00" }]
+      }
+    },
+    {
+      "id": "28909215",
+      "url": "https://www.airbnb.com/rooms/28909215",
+      "title": "Flat in Margao",
+      "latitude": 15.27,
+      "longitude": 73.96,
+      "rating": 3.2,
+      "reviews": 41,
+      "badges": [],
+      "photos": [],
+      "price": {
+        "originalPrice": "$45",
+        "discountedPrice": "$45",
+        "qualifier": "for 3 nights",
+        "breakdown": [{ "description": "3 nights x $15.00", "price": "$45.00" }]
+      }
+    },
+    {
+      "id": "28909216",
+      "url": "https://www.airbnb.com/rooms/28909216",
+      "title": "Villa in Assagao",
+      "latitude": 15.59,
+      "longitude": 73.79,
+      "rating": 4.95,
+      "reviews": 128,
+      "badges": ["Superhost"],
+      "photos": [],
+      "price": {
+        "originalPrice": "$120",
+        "discountedPrice": "$105",
+        "qualifier": "for 3 nights",
+        "breakdown": [{ "description": "3 nights x $40.00", "price": "$120.00" }]
+      }
+    },
+    {
+      "id": "28909217",
+      "url": "https://www.airbnb.com/rooms/28909217",
+      "title": "Home in Colva",
+      "latitude": 15.28,
+      "longitude": 73.91,
+      "rating": 0,
+      "reviews": 0,
+      "badges": ["New"],
+      "photos": [],
+      "price": {
+        "originalPrice": "$36",
+        "discountedPrice": "$36",
+        "qualifier": "for 3 nights",
+        "breakdown": [{ "description": "3 nights x $12.00", "price": "$36.00" }]
+      }
+    },
+    {
+      "id": "28909218",
+      "url": "https://www.airbnb.com/rooms/28909218",
+      "title": "Apartment in Candolim",
+      "latitude": 15.51,
+      "longitude": 73.76,
+      "rating": 4.7,
+      "reviews": 260,
+      "badges": [],
+      "photos": [],
+      "price": {
+        "originalPrice": "$90",
+        "discountedPrice": "$90",
+        "qualifier": "for 3 nights",
+        "breakdown": [{ "description": "3 nights x $30.00", "price": "$90.00" }]
+      }
+    }
+  ],
+  "pagination": { "nextPageToken": "mock-token-2", "pageTokens": ["mock-token-2"] }
+}
